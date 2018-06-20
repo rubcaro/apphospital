@@ -44,7 +44,16 @@ const RootStack = createStackNavigator(
     Contacto: ContactoScreen
   },
   {
-    InitialRouteName: "Home"
+    InitialRouteName: "Home",
+    navigationOptions: {
+      headerStyle: {
+        backgroundColor: '#6DC8E3',
+      },
+      headerTintColor: 'white',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      }
+    }
   }
 );
 

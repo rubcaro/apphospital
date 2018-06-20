@@ -1,16 +1,49 @@
 import React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Image,
+  TouchableOpacity
+} from "react-native";
 import MapView from "react-native-maps";
 import Communications from "react-native-communications";
 
 export default class Contacto extends React.Component {
+  static navifationOptions = {
+    title: "Contacto"
+  };
   render() {
     return (
-      <View>
-        <Button
-          title="Llamar"
-          onPress={() => Communications.phonecall("0123456789", true)}
-        />
+      <View style={styles.background}>
+        <Text style={styles.title}>Teléfonos de contacto</Text>
+        <Text style={styles.subtitle}>Fono urgencias</Text>
+        <View style={styles.phones}>
+          <TouchableOpacity
+            onPress={() => Communications.phonecall("612293295", true)}
+            style={styles.phones}
+          >
+            <Image
+              source={require("./../assets/phone.png")}
+              style={styles.icon}
+            />
+            <Text style={styles.phoneNumber}>61 2 293295</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.subtitle}>Fono mesa central</Text>
+        <View style={styles.phones}>
+          <TouchableOpacity
+            onPress={() => Communications.phonecall("612293000", true)}
+            style={styles.phones}
+          >
+            <Image
+              source={require("./../assets/phone.png")}
+              style={styles.icon}
+            />
+            <Text style={styles.phoneNumber}>61 2 293000</Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.container}>
           <MapView
             initialRegion={{
@@ -29,7 +62,7 @@ export default class Contacto extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject,
+    // ...StyleSheet.absoluteFillObject,
     height: 400,
     width: 400,
     justifyContent: "flex-end",
@@ -37,5 +70,32 @@ const styles = StyleSheet.create({
   },
   map: {
     ...StyleSheet.absoluteFillObject
+  },
+  phones: {
+    backgroundColor: "white",
+    flexDirection: "row",
+    marginBottom: 6,
+    marginLeft: 5
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginRight: 10
+  },
+  background: {
+    backgroundColor: "white",
+    paddingTop: 8
+  },
+  title: {
+    marginBottom: 15,
+    fontSize: 20,
+    textAlign: "center"
+  },
+  subtitle: {
+    marginBottom: 8,
+    fontSize: 18
+  },
+  phoneNumber: {
+    fontSize: 20
   }
 });

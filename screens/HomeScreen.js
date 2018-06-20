@@ -13,6 +13,9 @@ import items from "./../data/items";
 import MenuItem from "./../components/MenuItem";
 
 export default class HomeScreen extends React.Component {
+  static navifationOptions = {
+    title: "Hospital Clínico Magallanes"
+  };
   showItems = () => {
     return items.map((item, index) => (
       <TouchableOpacity
