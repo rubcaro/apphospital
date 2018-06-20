@@ -22,6 +22,7 @@ import items from "./data/items";
 import BancoSangreScreen from "./screens/BancoSangreScreen";
 import ContactoScreen from "./screens/ContactoScreen";
 import HomeScreen from "./screens/HomeScreen";
+import Opciones from './screens/Opciones'
 
 const CustomDrawerContentComponent = props => (
   <ScrollView>
@@ -41,7 +42,8 @@ const RootStack = createStackNavigator(
   {
     Home: HomeScreen,
     BancoSangre: BancoSangreScreen,
-    Contacto: ContactoScreen
+    Contacto: ContactoScreen,
+    Opciones: Opciones
   },
   {
     InitialRouteName: "Home",

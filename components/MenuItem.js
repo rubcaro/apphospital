@@ -19,7 +19,8 @@ const style = StyleSheet.create({
     maxHeight: 100,
     minHeight: 100,
     paddingVertical: 15,
-    marginTop: 10
+    marginTop: 10,
+    paddingLeft: 10
   },
   img: {
     width: 60,

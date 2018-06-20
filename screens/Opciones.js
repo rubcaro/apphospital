@@ -1,14 +1,14 @@
 import React from "react";
 import { View, Text } from "react-native";
 
-export default class BancoSangreScreen extends React.Component {
+export default class OpcionesScreen extends React.Component {
   static navigationOptions = {
-    title: "Banco de Sangre"
+    title: "Opciones"
   };
   render() {
     return (
       <View>
-        <Text>Banco de Sangre</Text>
+        <Text>Opciones</Text>
       </View>
     );
   }

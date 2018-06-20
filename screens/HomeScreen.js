@@ -4,17 +4,21 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Button
 } from "react-native";
-
 import { createDrawerNavigator } from "react-navigation";
 
 import items from "./../data/items";
 import MenuItem from "./../components/MenuItem";
+import Title from "./../components/Title"
+
 
 export default class HomeScreen extends React.Component {
-  static navifationOptions = {
-    title: "Hospital Clínico Magallanes"
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: <Title nav={navigation}/>
+    }
   };
   showItems = () => {
     return items.map((item, index) => (

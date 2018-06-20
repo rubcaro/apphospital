@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 import Communications from "react-native-communications";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default class Contacto extends React.Component {
-  static navifationOptions = {
+  static navigationOptions = {
     title: "Contacto"
   };
   render() {
@@ -24,10 +25,7 @@ export default class Contacto extends React.Component {
             onPress={() => Communications.phonecall("612293295", true)}
             style={styles.phones}
           >
-            <Image
-              source={require("./../assets/phone.png")}
-              style={styles.icon}
-            />
+            <Icon name="phone" style={styles.icon} />
             <Text style={styles.phoneNumber}>61 2 293295</Text>
           </TouchableOpacity>
         </View>
@@ -37,10 +35,7 @@ export default class Contacto extends React.Component {
             onPress={() => Communications.phonecall("612293000", true)}
             style={styles.phones}
           >
-            <Image
-              source={require("./../assets/phone.png")}
-              style={styles.icon}
-            />
+            <Icon name="phone" style={styles.icon} />
             <Text style={styles.phoneNumber}>61 2 293000</Text>
           </TouchableOpacity>
         </View>
@@ -78,8 +73,7 @@ const styles = StyleSheet.create({
     marginLeft: 5
   },
   icon: {
-    width: 30,
-    height: 30,
+    fontSize: 25,
     marginRight: 10
   },
   background: {
