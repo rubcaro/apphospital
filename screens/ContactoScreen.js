@@ -42,10 +42,10 @@ export default class Contacto extends React.Component {
         <View style={styles.container}>
           <MapView
             initialRegion={{
-              latitude: 37.78825,
-              longitude: -122.4324,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421
+              latitude: -53.122948,
+              longitude: -70.894893,
+              latitudeDelta: 0.0100,
+              longitudeDelta: 0.0100
             }}
             style={styles.map}
           />

@@ -5,7 +5,7 @@ export default async message => {
     .setNotificationId("1")
     .setTitle(message.data.title)
     .setBody(message.data.body);
-  noti.android.setChannelId("1").android.setSmallIcon("ic_launcher");
+  noti.android.setChannelId("1").android.setSmallIcon("ic_logo");
   firebase.notifications().displayNotification(noti);
   return Promise.resolve();
 };

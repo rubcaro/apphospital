@@ -37,5 +37,6 @@
       <meta-data
           android:name="com.google.android.geo.API_KEY"
           android:value="AIzaSyCyVrvNqp9C3UL-4LSdTzOl-uqVZwe4NLM"/>
+      <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@mipmap/ic_logo" />
     </application>
 </manifest>

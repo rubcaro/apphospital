@@ -5,31 +5,33 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  Button
+  Button,
+  TouchableNativeFeedback
 } from "react-native";
 import { createDrawerNavigator } from "react-navigation";
 
 import items from "./../data/items";
 import MenuItem from "./../components/MenuItem";
-import Title from "./../components/Title"
-
+import Title from "./../components/Title";
 
 export default class HomeScreen extends React.Component {
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <Title nav={navigation}/>
-    }
+      headerTitle: <Title nav={navigation} />
+    };
   };
   showItems = () => {
     return items.map((item, index) => (
-      <TouchableOpacity
+      <TouchableNativeFeedback
         onPress={() => this.props.navigation.navigate(item.navigation)}
-        underlaycolor="white"
-        style={{ height: 100 }}
+        background={TouchableNativeFeedback.SelectableBackground()}
+        useForeground={true}
         key={index}
       >
-        <MenuItem {...item} />
-      </TouchableOpacity>
+        <View>
+          <MenuItem {...item} />
+        </View>
+      </TouchableNativeFeedback>
     ));
   };
   render() {
