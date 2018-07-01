@@ -71,7 +71,7 @@ export default class DanosTuOpinionScreen extends React.Component {
   }
 
   componentDidMount() {
-    fetch("http://192.168.0.14:9999/api/encuesta/1")
+    fetch("http://206.189.220.82/api/encuesta/1")
       .then(res => res.json())
       .then(data => data[0])
       .then(encuesta => {
@@ -105,7 +105,7 @@ export default class DanosTuOpinionScreen extends React.Component {
         }
       });
     });
-    fetch("http://192.168.0.14:9999/api/ingresar-resultado", {
+    fetch("http://206.189.220.82/api/ingresar-resultado", {
       body: JSON.stringify(respuesta),
       headers: {
         "Content-Type": "application/json"
@@ -113,7 +113,10 @@ export default class DanosTuOpinionScreen extends React.Component {
       method: "POST"
     })
       .then(response => response.json())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data);
+        alert("Encuesta enviada correctamente");
+      })
       .catch(error => console.log(error));
   }
 

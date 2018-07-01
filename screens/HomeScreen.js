@@ -6,15 +6,27 @@ import {
   TouchableOpacity,
   StyleSheet,
   Button,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  SafeAreaView
 } from "react-native";
 import { createDrawerNavigator } from "react-navigation";
 
+import SideMenu from "./SideMenu";
 import items from "./../data/items";
 import MenuItem from "./../components/MenuItem";
 import Title from "./../components/Title";
 
-export default class HomeScreen extends React.Component {
+class SideBar extends React.Component {
+  render() {
+    return (
+      <View>
+        <Text>Soy un sidebar</Text>
+      </View>
+    );
+  }
+}
+
+class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: <Title nav={navigation} />
@@ -34,10 +46,31 @@ export default class HomeScreen extends React.Component {
       </TouchableNativeFeedback>
     ));
   };
+  closeDrawer = () => {
+    this.drawer._root.close();
+  };
+  openDrawer = () => {
+    this.drawer._root.open();
+  };
   render() {
     return <ScrollView style={styles.container}>{this.showItems()}</ScrollView>;
   }
 }
+
+const HomeScreenStackNavigator = createDrawerNavigator(
+  {
+    HomeScreen: HomeScreen
+  },
+  {
+    contentComponent: props => (
+      <ScrollView>
+        <SafeAreaView>
+          <Text>Soy un sidebar</Text>
+        </SafeAreaView>
+      </ScrollView>
+    )
+  }
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -46,3 +79,5 @@ const styles = StyleSheet.create({
     // marginTop: Constants.statusBarHeight
   }
 });
+
+export default HomeScreenStackNavigator;

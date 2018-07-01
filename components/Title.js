@@ -14,7 +14,7 @@ export default class Title extends React.Component {
   render() {
     return (
       <View style={styleTitle.container}>
-        <TouchableOpacity onPress={() => alert("sidebar")} >
+        <TouchableOpacity onPress={() => this.props.nav.toggleDrawer()} >
           <Icon name="bars" style={styleTitle.icon}/>
         </TouchableOpacity>
         <Text style={styleTitle.title}>Hospital Clínico Magallanes</Text>
