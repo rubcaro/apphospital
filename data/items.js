@@ -27,7 +27,7 @@ const items = [
     title: "Danos tu opinión",
     description: "Lorem ipsum dolor sit amet",
     path: require("./../assets/img/logo-opinion.png"),
-    navigation: "Opinion"
+    navigation: "Encuestas"
   },
   {
     title: "Danos tu opinión",

@@ -1,5 +1,13 @@
 import React from "react";
-import { View, Text, StyleSheet, Button, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  ScrollView,
+  ActivityIndicator,
+  AsyncStorage
+} from "react-native";
 import { Radio, ListItem, Left } from "native-base";
 
 export default class DanosTuOpinionScreen extends React.Component {
@@ -30,19 +38,7 @@ export default class DanosTuOpinionScreen extends React.Component {
         ]
       },
       encuesta_id: "",
-      preguntas: [
-        {
-          pregunta_id: "",
-          pregunta: "",
-          alternativas: [
-            {
-              id: "",
-              alternativa: "",
-              selected: false
-            }
-          ]
-        }
-      ]
+      preguntas: null
     };
   }
 
@@ -65,19 +61,28 @@ export default class DanosTuOpinionScreen extends React.Component {
         alternativas: alternativas
       });
     });
-    console.log(encuesta);
+    // console.log(encuesta);
     this.setState({ encuesta_id: encuesta.id });
     return preguntas;
   }
 
+  async _fetchData() {
+    console.log("http://206.189.220.82/api/encuesta/" + this.props.navigation.getParam('encuesta_id'));
+    let response = await fetch("http://206.189.220.82/api/encuesta/" + this.props.navigation.getParam('encuesta_id'));
+    let res = await response.json();
+    let data = await res[0];
+    return data;
+  }
+
   componentDidMount() {
-    fetch("http://206.189.220.82/api/encuesta/1")
-      .then(res => res.json())
-      .then(data => data[0])
-      .then(encuesta => {
-        let preguntas = this.createPreguntas(encuesta);
+    this._fetchData()
+      .then(data => {
+        let preguntas = this.createPreguntas(data);
+        console.log('vgvhvg'+preguntas);
         this.setState({ preguntas: preguntas });
-      });
+      })
+      .then(console.log(this.state.preguntas))
+      .catch(eror => console.log(error));
   }
   handleRadio(indexPregunta, indexAlternativa) {
     this.setState((prevState, props) => {
@@ -105,22 +110,67 @@ export default class DanosTuOpinionScreen extends React.Component {
         }
       });
     });
-    fetch("http://206.189.220.82/api/ingresar-resultado", {
-      body: JSON.stringify(respuesta),
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST"
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        alert("Encuesta enviada correctamente");
+    console.log(respuesta.respuestas.length);
+    console.log(respuesta.respuestas );
+    if (respuesta.respuestas.length !== 10) {
+      alert("Responda todas las preguntas por favor");
+    } else {
+      fetch("http://206.189.220.82/api/ingresar-resultado", {
+        body: JSON.stringify(respuesta),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST"
       })
-      .catch(error => console.log(error));
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          this._storeData();
+          alert("Encuesta enviada correctamente");
+        })
+        .catch(error => {
+          console.log(error);
+          alert(
+            "Lo sentimos, su encuesta no se ha podido enviar. Vuelva a intentar"
+          );
+        });
+    }
   }
 
+  _retrieveData = async () => {
+    try {
+      // console.log(` asd encuesta-${this.state.encuesta_id}`);
+      const value = await AsyncStorage.getItem("a");
+      alert("dfdf" + value);
+      if (value !== null) {
+        // We have data!!
+        alert(value);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  _storeData = async () => {
+    try {
+      await AsyncStorage.setItem("a", "1");
+    } catch (error) {
+      // Error saving data
+    }
+  };
+
   render() {
+    const { navigation } = this.props;
+    const encuestaId = navigation.getParam('encuesta_id', 'NO-ID');
+    if (!this.state.preguntas) {
+      return (
+        <ActivityIndicator
+          animating={true}
+          style={styles.indicator}
+          size="large"
+        />
+      );
+    }
     return (
       <ScrollView style={{ backgroundColor: "white" }}>
         <Text>{this.state.encuesta.nombre}</Text>
@@ -154,5 +204,11 @@ export default class DanosTuOpinionScreen extends React.Component {
 const styles = StyleSheet.create({
   listRadio: {
     flexDirection: "row"
+  },
+  indicator: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    height: 80
   }
 });

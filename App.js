@@ -4,7 +4,7 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import {
   createStackNavigator,
@@ -29,6 +29,7 @@ import Preguntas from "./screens/PreguntasScreen";
 import Emergencia from "./screens/EmergenciaScreen";
 import Opinion from "./screens/DanosTuOpinionScreen";
 import SideMenu from "./screens/SideMenu"
+import Encuestas from "./screens/Encuestas"
 
 const CustomDrawerContentComponent = props => (
   <ScrollView>
@@ -126,6 +127,7 @@ const RootStack = createStackNavigator(
     Preguntas: Preguntas,
     Emergencia: Emergencia,
     Opinion: Opinion,
+    Encuestas: Encuestas,
     App: App,
     
   },
