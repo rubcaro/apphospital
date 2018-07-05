@@ -112,7 +112,7 @@ export default class DanosTuOpinionScreen extends React.Component {
     });
     console.log(respuesta.respuestas.length);
     console.log(respuesta.respuestas );
-    if (respuesta.respuestas.length !== 10) {
+    if (respuesta.respuestas.length !== 2) {
       alert("Responda todas las preguntas por favor");
     } else {
       fetch("http://206.189.220.82/api/ingresar-resultado", {
@@ -137,23 +137,9 @@ export default class DanosTuOpinionScreen extends React.Component {
     }
   }
 
-  _retrieveData = async () => {
-    try {
-      // console.log(` asd encuesta-${this.state.encuesta_id}`);
-      const value = await AsyncStorage.getItem("a");
-      alert("dfdf" + value);
-      if (value !== null) {
-        // We have data!!
-        alert(value);
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
-
   _storeData = async () => {
     try {
-      await AsyncStorage.setItem("a", "1");
+      await AsyncStorage.setItem(`encuesta-${this.props.navigation.getParam('encuesta_id')}`, "1");
     } catch (error) {
       // Error saving data
     }

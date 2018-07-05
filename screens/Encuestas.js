@@ -1,22 +1,57 @@
 import React from "react";
-import { View, Button, ActivityIndicator, StyleSheet } from "react-native";
+import {
+  View,
+  Button,
+  ActivityIndicator,
+  StyleSheet,
+  AsyncStorage
+} from "react-native";
 
 export default class Encuestas extends React.Component {
   constructor() {
     super();
     this.state = {
-      encuestas: null
+      encuestas: null,
+      show: false
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     fetch("http://206.189.220.82/api/encuestas")
       .then(response => response.json())
       .then(data => {
-        this.setState({ encuestas: data });
-        console.log(this.state.encuestas[0]);
+        // this.setState({ encuestas: data });
+        this._reviewEncuesta(data);
       });
   }
+
+  _reviewEncuesta = async data => {
+    var encuestas1 = [];
+    const results = data.map(async (encuesta, index) => {
+      return this._retrieveData(`encuesta-${encuesta.id}`).then(data => {
+        if (data == null) {
+          console.log(encuesta);
+          encuestas1[index] = encuesta;
+        }
+      });
+    });
+    Promise.all(results).then(() => {
+      this.setState({ encuestas: encuestas1 });
+    });
+  };
+
+  _loopData() {}
+
+  _retrieveData = async id => {
+    try {
+      const value = await AsyncStorage.getItem(id);
+      if (value !== null) {
+        return value;
+      }
+    } catch (error) {
+      alert("error");
+    }
+  };
 
   render() {
     if (!this.state.encuestas) {
@@ -30,7 +65,7 @@ export default class Encuestas extends React.Component {
     }
     return (
       <View>
-        {this.state.encuestas.map((encuesta,index) => (
+        {this.state.encuestas.map((encuesta, index) => (
           <Button
             title={encuesta.nombre}
             key={index}
@@ -41,6 +76,10 @@ export default class Encuestas extends React.Component {
             }
           />
         ))}
+        <Button
+          title="pruhgveba"
+          onPress={() => console.log(this.state.encuestas)}
+        />
       </View>
     );
   }
