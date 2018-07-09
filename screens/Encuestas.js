@@ -4,10 +4,17 @@ import {
   Button,
   ActivityIndicator,
   StyleSheet,
-  AsyncStorage
+  AsyncStorage,
+  TouchableNativeFeedback,
+  Text
 } from "react-native";
+import IconFontAwesome from "react-native-vector-icons/FontAwesome";
 
 export default class Encuestas extends React.Component {
+  static navigationOptions = {
+    title: "Encuestas disponibles"
+  };
+
   constructor() {
     super();
     this.state = {
@@ -64,22 +71,28 @@ export default class Encuestas extends React.Component {
       );
     }
     return (
-      <View>
+      <View style={styles.container}>
         {this.state.encuestas.map((encuesta, index) => (
-          <Button
-            title={encuesta.nombre}
-            key={index}
+          <TouchableNativeFeedback
             onPress={() =>
               this.props.navigation.navigate("Opinion", {
                 encuesta_id: encuesta.id
               })
             }
-          />
+            background={TouchableNativeFeedback.SelectableBackground()}
+            useForeground={true}
+            key={index}
+          >
+            <View style={styles.encuesta}>
+              <IconFontAwesome name="pencil-square-o" style={styles.logo} />
+              <Text style={styles.nombreEncuesta}>{encuesta.nombre}</Text>
+            </View>
+          </TouchableNativeFeedback>
         ))}
-        <Button
+        {/* <Button
           title="pruhgveba"
           onPress={() => console.log(this.state.encuestas)}
-        />
+        /> */}
       </View>
     );
   }
@@ -91,5 +104,25 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 80
+  },
+  container: {
+    backgroundColor: "white",
+    height: "100%",
+  },
+  logo: {
+    fontSize: 35,
+    color: "white",
+    marginRight: 10,
+  },
+  encuesta: {
+    flexDirection: 'row',
+    backgroundColor: '#6DC8E3',
+    paddingVertical: 12,
+    paddingLeft: 20,
+    marginTop: 30
+  },
+  nombreEncuesta: {
+    color: 'white',
+    fontSize: 20
   }
 });

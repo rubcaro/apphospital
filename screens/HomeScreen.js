@@ -65,7 +65,7 @@ const HomeScreenStackNavigator = createDrawerNavigator(
     contentComponent: props => (
       <ScrollView>
         <SafeAreaView>
-          <Text>Soy un sidebar</Text>
+          <SideMenu/>
         </SafeAreaView>
       </ScrollView>
     )

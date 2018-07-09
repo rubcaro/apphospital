@@ -6,13 +6,14 @@ import {
   Button,
   ScrollView,
   ActivityIndicator,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from "react-native";
 import { Radio, ListItem, Left } from "native-base";
 
 export default class DanosTuOpinionScreen extends React.Component {
   static navigationOptions = {
-    title: "Danos tu opinión"
+    title: "Nombre de la encuesta"
   };
 
   constructor() {
@@ -98,6 +99,17 @@ export default class DanosTuOpinionScreen extends React.Component {
   }
 
   sendEncuesta() {
+    Alert.alert(
+      'Confirmación de envío',
+      '¿Está seguro que desea enviar la encuesta?',
+      [
+        {text: 'Cancelar', onPress: () => {}, style: 'cancel'},
+        {text: 'Enviar', onPress: () => this.storeResult()},
+      ]
+    )
+  }
+
+  storeResult() {
     let respuesta = { encuesta_id: "", respuestas: [] };
     respuesta.encuesta_id = this.state.encuesta_id;
     this.state.preguntas.map(pregunta => {
@@ -110,9 +122,8 @@ export default class DanosTuOpinionScreen extends React.Component {
         }
       });
     });
-    console.log(respuesta.respuestas.length);
-    console.log(respuesta.respuestas );
-    if (respuesta.respuestas.length !== 2) {
+    console.log(this.state.preguntas);
+    if (respuesta.respuestas.length !== this.state.preguntas.length) {
       alert("Responda todas las preguntas por favor");
     } else {
       fetch("http://206.189.220.82/api/ingresar-resultado", {
@@ -159,11 +170,13 @@ export default class DanosTuOpinionScreen extends React.Component {
     }
     return (
       <ScrollView style={{ backgroundColor: "white" }}>
-        <Text>{this.state.encuesta.nombre}</Text>
-        {/* <Text>{this.state.encuesta.preguntas[0].pregunta}</Text> */}
+        {/* <Text>{this.state.encuesta.nombre}</Text> */}
+        <View style={styles.instructionsContainer}>
+          <Text style={styles.textInstructions}>Por favor, responda estas preguntas (tiempo estimado, 5 minutos)</Text>
+        </View>
         {this.state.preguntas.map((pregunta, indexPregunta) => (
-          <View key={indexPregunta}>
-            <Text>{pregunta.pregunta}</Text>
+          <View key={indexPregunta} style={styles.preguntaContainer}>
+            <Text style={styles.pregunta}>{pregunta.pregunta}</Text>
             {pregunta.alternativas.map((alternativa, indexAlternativa) => (
               <ListItem
                 key={indexAlternativa}
@@ -175,8 +188,9 @@ export default class DanosTuOpinionScreen extends React.Component {
                 <Radio
                   selected={alternativa.selected}
                   style={{ marginRight: 5 }}
+                  selectedColor="#6DC8E3"
                 />
-                <Text>{alternativa.alternativa}</Text>
+                <Text style={styles.alternativa}>{alternativa.alternativa}</Text>
               </ListItem>
             ))}
           </View>
@@ -196,5 +210,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 80
+  },
+  instructionsContainer: {
+    backgroundColor: '#E3F5FA',
+    paddingHorizontal: 25,
+    paddingVertical: 15
+  },
+  textInstructions: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#313131',
+    textAlign: 'center'
+  },
+  pregunta: {
+    fontSize: 15,
+    fontWeight: 'bold'
+  },
+  alternativa: {
+    fontSize: 15
+  },
+  preguntaContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 15,
   }
 });
