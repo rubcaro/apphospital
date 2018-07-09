@@ -5,6 +5,7 @@ export default class BancoSangreScreen extends React.Component {
   static navigationOptions = {
     title: "Banco de Sangre"
   };
+  
   render() {
     return (
       <View>

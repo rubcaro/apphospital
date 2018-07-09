@@ -61,35 +61,42 @@ const styles = StyleSheet.create({
     height: 400,
     width: 400,
     justifyContent: "flex-end",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 10
   },
   map: {
     ...StyleSheet.absoluteFillObject
   },
   phones: {
-    backgroundColor: "white",
     flexDirection: "row",
     marginBottom: 6,
-    marginLeft: 5
+    // marginLeft: 5
   },
   icon: {
     fontSize: 25,
-    marginRight: 10
+    marginRight: 10,
+    color: 'white'
   },
   background: {
-    backgroundColor: "white",
-    paddingTop: 8
+    backgroundColor: "#6DC8E3",
+    paddingTop: 8,
+    alignItems: 'center'
   },
   title: {
     marginBottom: 15,
     fontSize: 20,
-    textAlign: "center"
+    textAlign: "center",
+    color: 'white',
+    fontWeight: 'bold',
+    marginTop: 15
   },
   subtitle: {
     marginBottom: 8,
-    fontSize: 18
+    fontSize: 18,
+    color: 'white'
   },
   phoneNumber: {
-    fontSize: 20
+    fontSize: 20,
+    color: 'white'
   }
 });

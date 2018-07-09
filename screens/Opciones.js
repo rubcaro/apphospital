@@ -14,7 +14,7 @@ export default class OpcionesScreen extends React.Component {
           <Text>Desactivar notificaciones</Text>
         </View>
         <View style={styles.switch}>
-          <Switch value={true} />
+          <Switch value={false} />
           <Text>Desactivar sonido</Text>
         </View>
         <View style={styles.hr} />
