@@ -4,7 +4,7 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import {
   createStackNavigator,
@@ -28,8 +28,13 @@ import Opciones from "./screens/Opciones";
 import Preguntas from "./screens/PreguntasScreen";
 import Emergencia from "./screens/EmergenciaScreen";
 import Opinion from "./screens/DanosTuOpinionScreen";
-import SideMenu from "./screens/SideMenu"
-import Encuestas from "./screens/Encuestas"
+import SideMenu from "./screens/SideMenu";
+import Encuestas from "./screens/Encuestas";
+import MensajeDonacion from "./screens/MensajeDonacionScreen";
+import LoginScreen from "./screens/LoginScreen";
+
+// import { YellowBox } from 'react-native';
+// YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 const CustomDrawerContentComponent = props => (
   <ScrollView>
@@ -67,6 +72,8 @@ firebase
 export default class App extends React.Component {
   componentDidMount() {
     firebase.messaging().subscribeToTopic("allDevices");
+    let messageTitle = "";
+    let messageBody = "";
     this.messageListener = firebase.messaging().onMessage(message => {
       const noti = new firebase.notifications.Notification()
         .setNotificationId("1")
@@ -74,6 +81,8 @@ export default class App extends React.Component {
         .setBody(message.data.body);
       noti.android.setChannelId("1").android.setSmallIcon("ic_logo");
       firebase.notifications().displayNotification(noti);
+      messageTitle = message.data.title;
+      messageBody = message.data.body;
     });
     this.notificationDisplayedListener = firebase
       .notifications()
@@ -91,7 +100,10 @@ export default class App extends React.Component {
       .notifications()
       .onNotificationOpened(notificationOpen => {
         firebase.notifications().removeAllDeliveredNotifications();
-        NavigationService.navigate("BancoSangre");
+        NavigationService.navigate("MensajeDonacion", {
+          messageTitle: messageTitle,
+          messageBody: messageBody
+        });
       });
   }
   componentWillUnmount() {
@@ -115,11 +127,12 @@ export default class App extends React.Component {
 
 const RootStack = createStackNavigator(
   {
+    Login: LoginScreen,
     Home: {
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: <Title nav={navigation} />
-      }),
+      })
     },
     BancoSangre: BancoSangreScreen,
     Contacto: ContactoScreen,
@@ -129,10 +142,10 @@ const RootStack = createStackNavigator(
     Opinion: Opinion,
     Encuestas: Encuestas,
     App: App,
-    
+    MensajeDonacion: MensajeDonacion,
   },
   {
-    InitialRouteName: "Home",
+    InitialRouteName: "Login",
     navigationOptions: {
       headerStyle: {
         backgroundColor: "#6DC8E3"

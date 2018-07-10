@@ -30,9 +30,15 @@ const items = [
     navigation: "Encuestas"
   },
   {
-    title: "Danos tu opinión",
+    title: "Reglamentos",
     description: "Lorem ipsum dolor sit amet",
-    path: require("./../assets/img/logo-opinion.png"),
+    path: require("./../assets/img/reglamentos.png"),
+    navigation: "Opinion"
+  },
+  {
+    title: "IAAS",
+    description: "Lorem ipsum dolor sit amet",
+    path: require("./../assets/img/iaas.png"),
     navigation: "Opinion"
   }
 ];

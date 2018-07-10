@@ -53,7 +53,9 @@ class HomeScreen extends React.Component {
     this.drawer._root.open();
   };
   render() {
-    return <ScrollView style={styles.container}>{this.showItems()}</ScrollView>;
+    return <ScrollView style={styles.container}>
+            {this.showItems()}
+          </ScrollView>;
   }
 }
 

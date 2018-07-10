@@ -29,6 +29,7 @@ export default class SideMenu extends React.Component {
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
+          onRequestClose={() => console.log('modal closed')}
         >
           <View>
             <Text>sdfjdsfnkjdsfkjnk</Text>
