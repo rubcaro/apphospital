@@ -29,7 +29,7 @@ class SideBar extends React.Component {
 class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <Title nav={navigation} />
+      headerTitle: <Title nav={navigation} />,
     };
   };
   showItems = () => {
