@@ -127,13 +127,13 @@ export default class App extends React.Component {
 
 const RootStack = createStackNavigator(
   {
-    Login: LoginScreen,
     Home: {
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
         headerTitle: <Title nav={navigation} />
       })
     },
+    Login: LoginScreen,
     BancoSangre: BancoSangreScreen,
     Contacto: ContactoScreen,
     Opciones: Opciones,

@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Switch } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  TouchableNativeFeedback
+} from "react-native";
 
 export default class OpcionesScreen extends React.Component {
   static navigationOptions = {
@@ -26,14 +32,20 @@ export default class OpcionesScreen extends React.Component {
           </Text>
         </View>
         <View style={styles.hr} />
-        <View>
-          <Text style={styles.subtitle}>Cambiar cuenta</Text>
-          <Text>Ingresar desde una cuenta distinta de usuario</Text>
-        </View>
+        <TouchableNativeFeedback
+          onPress={() => this.props.navigation.navigate("Login")}
+          background={TouchableNativeFeedback.SelectableBackground()}
+          useForeground={true}
+        >
+          <View>
+            <Text style={styles.subtitle}>Cambiar cuenta</Text>
+            <Text>Ingresar desde una cuenta distinta de usuario</Text>
+          </View>
+        </TouchableNativeFeedback>
         <View style={styles.hr} />
         <Text style={styles.title}>Información</Text>
-        <Text style={{paddingBottom: 2}}>Términos y condiciones</Text>
-        <View style={styles.hr} />  
+        <Text style={{ paddingBottom: 2 }}>Términos y condiciones</Text>
+        <View style={styles.hr} />
         <Text>Acerca de</Text>
         <View style={styles.hr} />
       </View>
@@ -46,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingHorizontal: 25,
     paddingVertical: 25,
-    height: '100%'
+    height: "100%"
   },
   hr: {
     borderBottomWidth: StyleSheet.hairlineWidth,

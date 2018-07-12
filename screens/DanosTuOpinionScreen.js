@@ -83,7 +83,7 @@ export default class DanosTuOpinionScreen extends React.Component {
         this.setState({ preguntas: preguntas });
       })
       .then(console.log(this.state.preguntas))
-      .catch(eror => console.log(error));
+      .catch(error => console.log(error));
   }
   handleRadio(indexPregunta, indexAlternativa) {
     this.setState((prevState, props) => {
