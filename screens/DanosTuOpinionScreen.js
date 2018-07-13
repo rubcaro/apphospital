@@ -7,9 +7,28 @@ import {
   ScrollView,
   ActivityIndicator,
   AsyncStorage,
-  Alert
+  Alert,
+  ProgressBarAndroid,
+  NativeModules,
+  LayoutAnimation
 } from "react-native";
 import { Radio, ListItem, Left } from "native-base";
+
+const { UIManager } = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+const customLinearLayout = {
+  duration: 200,
+    create: {
+      type: LayoutAnimation.Types.linear,
+      property: LayoutAnimation.Properties.scaleXY,
+    },
+    update: {
+      type: LayoutAnimation.Types.linear,
+    },
+}
 
 export default class DanosTuOpinionScreen extends React.Component {
   static navigationOptions = {
@@ -39,7 +58,10 @@ export default class DanosTuOpinionScreen extends React.Component {
         ]
       },
       encuesta_id: "",
-      preguntas: null
+      preguntas: null,
+      currentPregunta: null,
+      currentIndexPregunta: 0,
+      showEncuesta: false
     };
   }
 
@@ -68,8 +90,14 @@ export default class DanosTuOpinionScreen extends React.Component {
   }
 
   async _fetchData() {
-    console.log("http://206.189.220.82/api/encuesta/" + this.props.navigation.getParam('encuesta_id'));
-    let response = await fetch("http://206.189.220.82/api/encuesta/" + this.props.navigation.getParam('encuesta_id'));
+    console.log(
+      "http://206.189.220.82/api/encuesta/" +
+        this.props.navigation.getParam("encuesta_id")
+    );
+    let response = await fetch(
+      "http://206.189.220.82/api/encuesta/" +
+        this.props.navigation.getParam("encuesta_id")
+    );
     let res = await response.json();
     let data = await res[0];
     return data;
@@ -79,18 +107,21 @@ export default class DanosTuOpinionScreen extends React.Component {
     this._fetchData()
       .then(data => {
         let preguntas = this.createPreguntas(data);
-        console.log('vgvhvg'+preguntas);
+        this.setState({
+          currentPregunta: preguntas[this.state.currentIndexPregunta]
+        });
+        console.log(this.state.currentPregunta);
         this.setState({ preguntas: preguntas });
       })
       .then(console.log(this.state.preguntas))
       .catch(error => console.log(error));
   }
-  handleRadio(indexPregunta, indexAlternativa) {
+  handleRadio(indexAlternativa) {
     this.setState((prevState, props) => {
-      prevState.preguntas[indexPregunta].alternativas.map(
+      prevState.preguntas[this.state.currentIndexPregunta].alternativas.map(
         alternativa => (alternativa.selected = false)
       );
-      prevState.preguntas[indexPregunta].alternativas[
+      prevState.preguntas[this.state.currentIndexPregunta].alternativas[
         indexAlternativa
       ].selected = true;
 
@@ -100,13 +131,13 @@ export default class DanosTuOpinionScreen extends React.Component {
 
   sendEncuesta() {
     Alert.alert(
-      'Confirmación de envío',
-      '¿Está seguro que desea enviar la encuesta?',
+      "Confirmación de envío",
+      "¿Está seguro que desea enviar la encuesta?",
       [
-        {text: 'Cancelar', onPress: () => {}, style: 'cancel'},
-        {text: 'Enviar', onPress: () => this.storeResult()},
+        { text: "Cancelar", onPress: () => {}, style: "cancel" },
+        { text: "Enviar", onPress: () => this.storeResult() }
       ]
-    )
+    );
   }
 
   storeResult() {
@@ -150,15 +181,54 @@ export default class DanosTuOpinionScreen extends React.Component {
 
   _storeData = async () => {
     try {
-      await AsyncStorage.setItem(`encuesta-${this.props.navigation.getParam('encuesta_id')}`, "1");
+      await AsyncStorage.setItem(
+        `encuesta-${this.props.navigation.getParam("encuesta_id")}`,
+        "1"
+      );
     } catch (error) {
       // Error saving data
     }
   };
 
+  nextPregunta() {
+    let newIndex = this.state.currentIndexPregunta + 1;
+    Promise.resolve()
+      .then(() => {
+        this.setState({
+          currentIndexPregunta: newIndex
+        });
+      })
+      .then(() => {
+        this.setState({
+          currentPregunta: this.state.preguntas[this.state.currentIndexPregunta]
+        });
+        console.log(
+          this.state.currentIndexPregunta + " " + this.state.preguntas.length
+        );
+      });
+    // LayoutAnimation.linear();
+    LayoutAnimation.configureNext(customLinearLayout);
+  }
+
+  backPregunta() {
+    let newIndex = this.state.currentIndexPregunta - 1;
+    Promise.resolve()
+      .then(() => {
+        this.setState({
+          currentIndexPregunta: newIndex
+        });
+      })
+      .then(() => {
+        this.setState({
+          currentPregunta: this.state.preguntas[this.state.currentIndexPregunta]
+        });
+      });
+      LayoutAnimation.configureNext(customLinearLayout);
+  }
+
   render() {
     const { navigation } = this.props;
-    const encuestaId = navigation.getParam('encuesta_id', 'NO-ID');
+    const encuestaId = navigation.getParam("encuesta_id", "NO-ID");
     if (!this.state.preguntas) {
       return (
         <ActivityIndicator
@@ -168,13 +238,70 @@ export default class DanosTuOpinionScreen extends React.Component {
         />
       );
     }
-    return (
-      <ScrollView style={{ backgroundColor: "white" }}>
-        {/* <Text>{this.state.encuesta.nombre}</Text> */}
-        <View style={styles.instructionsContainer}>
-          <Text style={styles.textInstructions}>Por favor, responda estas preguntas (tiempo estimado, 5 minutos)</Text>
+    if (!this.state.showEncuesta) {
+      return (
+        <View style={{ backgroundColor: "white" }}>
+          <View style={styles.instructionsContainer}>
+            <Text style={styles.textInstructions}>
+              Por favor, responda estas preguntas (tiempo estimado, 5 minutos)
+            </Text>
+          </View>
+          <Button
+            title="comenzar"
+            onPress={() => {
+              this.setState({ showEncuesta: true });
+              LayoutAnimation.spring();
+            }}
+          />
         </View>
-        {this.state.preguntas.map((pregunta, indexPregunta) => (
+      );
+    }
+    return (
+      <View style={{ backgroundColor: "white", height: '100%'}}>
+        {/* <Text>{this.state.encuesta.nombre}</Text> */}
+        {/* <View style={styles.instructionsContainer}>
+          <Text style={styles.textInstructions}>
+            Por favor, responda estas preguntas (tiempo estimado, 5 minutos)
+          </Text>
+        </View> */}
+        <ScrollView style={styles.preguntaContainer}>
+          <Text>
+            Pregunta {this.state.currentIndexPregunta + 1} de{" "}
+            {this.state.preguntas.length}
+          </Text>
+          <ProgressBarAndroid
+            styleAttr="Horizontal"
+            indeterminate={false}
+            color="#6DC8E3"
+            progress={
+              ((this.state.currentIndexPregunta + 1) * 100) /
+              this.state.preguntas.length /
+              100
+            }
+          />
+          <Text style={styles.pregunta}>
+            {this.state.currentPregunta.pregunta}
+          </Text>
+          {this.state.currentPregunta.alternativas.map(
+            (alternativa, indexAlternativa) => (
+              <ListItem
+                key={indexAlternativa}
+                style={styles.listRadio}
+                onPress={() => this.handleRadio(indexAlternativa)}
+              >
+                <Radio
+                  selected={alternativa.selected}
+                  style={{ marginRight: 5 }}
+                  selectedColor="#6DC8E3"
+                />
+                <Text style={styles.alternativa}>
+                  {alternativa.alternativa}
+                </Text>
+              </ListItem>
+            )
+          )}
+        </ScrollView>
+        {/* {this.state.preguntas.map((pregunta, indexPregunta) => (
           <View key={indexPregunta} style={styles.preguntaContainer}>
             <Text style={styles.pregunta}>{pregunta.pregunta}</Text>
             {pregunta.alternativas.map((alternativa, indexAlternativa) => (
@@ -194,9 +321,20 @@ export default class DanosTuOpinionScreen extends React.Component {
               </ListItem>
             ))}
           </View>
-        ))}
-        <Button title="Enviar" onPress={() => this.sendEncuesta()} />
-      </ScrollView>
+        ))} */}
+        <View style={styles.buttonsContainer}>
+          {this.state.currentIndexPregunta !== 0 && (
+            <Button  title="Atrás" onPress={() => this.backPregunta()} />
+          )}
+          {this.state.currentIndexPregunta < this.state.preguntas.length - 1 && (
+            <Button style={styles.next} title="Siguiente" onPress={() => this.nextPregunta()} />
+          )}
+        </View>
+        {this.state.currentIndexPregunta ===
+          this.state.preguntas.length - 1 && (
+          <Button title="Enviar" onPress={() => this.sendEncuesta()} />
+        )}
+      </View>
     );
   }
 }
@@ -212,19 +350,19 @@ const styles = StyleSheet.create({
     height: 80
   },
   instructionsContainer: {
-    backgroundColor: '#E3F5FA',
+    backgroundColor: "#E3F5FA",
     paddingHorizontal: 25,
     paddingVertical: 15
   },
   textInstructions: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 20,
-    color: '#313131',
-    textAlign: 'center'
+    color: "#313131",
+    textAlign: "center"
   },
   pregunta: {
     fontSize: 15,
-    fontWeight: 'bold'
+    fontWeight: "bold"
   },
   alternativa: {
     fontSize: 15
@@ -232,5 +370,15 @@ const styles = StyleSheet.create({
   preguntaContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    // flex: 3
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    position: 'absolute',
+    top: 400,
+  },
+  next: {
+    marginLeft: 150,
+    width: 200
   }
 });
