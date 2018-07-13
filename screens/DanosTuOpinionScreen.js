@@ -10,7 +10,8 @@ import {
   Alert,
   ProgressBarAndroid,
   NativeModules,
-  LayoutAnimation
+  LayoutAnimation,
+  TouchableNativeFeedback
 } from "react-native";
 import { Radio, ListItem, Left } from "native-base";
 
@@ -21,18 +22,19 @@ UIManager.setLayoutAnimationEnabledExperimental &&
 
 const customLinearLayout = {
   duration: 200,
-    create: {
-      type: LayoutAnimation.Types.linear,
-      property: LayoutAnimation.Properties.scaleXY,
-    },
-    update: {
-      type: LayoutAnimation.Types.linear,
-    },
-}
+  create: {
+    type: LayoutAnimation.Types.linear,
+    property: LayoutAnimation.Properties.scaleXY
+  },
+  update: {
+    type: LayoutAnimation.Types.linear
+  }
+};
 
 export default class DanosTuOpinionScreen extends React.Component {
   static navigationOptions = {
-    title: "Nombre de la encuesta"
+    title: "Nombre de la encuesta",
+    header: null
   };
 
   constructor() {
@@ -223,7 +225,34 @@ export default class DanosTuOpinionScreen extends React.Component {
           currentPregunta: this.state.preguntas[this.state.currentIndexPregunta]
         });
       });
-      LayoutAnimation.configureNext(customLinearLayout);
+    LayoutAnimation.configureNext(customLinearLayout);
+  }
+
+  checkSendButton() {
+    if (this.state.currentIndexPregunta === this.state.preguntas.length - 1) {
+      return {
+        backgroundColor: "#6DC8E3",
+        paddingHorizontal: 60,
+        paddingVertical: 10,
+        marginHorizontal: 70,
+      };
+    } else {
+      return {
+        backgroundColor: "#6DC8E3",
+        paddingHorizontal: 60,
+        paddingVertical: 10,
+        opacity: 0.5,
+        marginHorizontal: 70,
+      }
+    }
+  }
+
+  checkSendButtonDisabled() {
+    if (this.state.currentIndexPregunta === this.state.preguntas.length - 1) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   render() {
@@ -240,45 +269,82 @@ export default class DanosTuOpinionScreen extends React.Component {
     }
     if (!this.state.showEncuesta) {
       return (
-        <View style={{ backgroundColor: "white" }}>
-          <View style={styles.instructionsContainer}>
-            <Text style={styles.textInstructions}>
-              Por favor, responda estas preguntas (tiempo estimado, 5 minutos)
-            </Text>
-          </View>
-          <Button
+        <View
+          style={{
+            backgroundColor: "white",
+            height: "100%",
+            alignItems: "center"
+          }}
+        >
+          {/* <View style={styles.instructionsContainer}> */}
+          <Text style={styles.textInstructions}>
+            Por favor, responda estas preguntas (tiempo estimado, 5 minutos)
+          </Text>
+          {/* </View> */}
+
+          <TouchableNativeFeedback
+            onPress={() => {
+              this.setState({ showEncuesta: true });
+              LayoutAnimation.spring();
+            }}
+            background={TouchableNativeFeedback.SelectableBackground()}
+            useForeground={true}
+          >
+            <View style={styles.startButton}>
+              <Text style={styles.startButtonText}>COMENZAR</Text>
+            </View>
+          </TouchableNativeFeedback>
+          {/* <Button
             title="comenzar"
             onPress={() => {
               this.setState({ showEncuesta: true });
               LayoutAnimation.spring();
             }}
-          />
+          /> */}
         </View>
       );
     }
     return (
-      <View style={{ backgroundColor: "white", height: '100%'}}>
-        {/* <Text>{this.state.encuesta.nombre}</Text> */}
-        {/* <View style={styles.instructionsContainer}>
-          <Text style={styles.textInstructions}>
-            Por favor, responda estas preguntas (tiempo estimado, 5 minutos)
-          </Text>
-        </View> */}
-        <ScrollView style={styles.preguntaContainer}>
-          <Text>
-            Pregunta {this.state.currentIndexPregunta + 1} de{" "}
+      <View style={{ backgroundColor: "white", height: "100%" }}>
+        <View style={styles.header}>
+          {this.state.currentIndexPregunta !== 0 && (
+            <TouchableNativeFeedback
+              onPress={() => {
+                this.setState({ showEncuesta: true });
+                LayoutAnimation.spring();
+              }}
+              background={TouchableNativeFeedback.SelectableBackground()}
+              useForeground={true}
+              onPress={() => this.backPregunta()}
+            >
+              <View style={[styles.buttonHeader, styles.buttonBack]}>
+                <Text style={styles.buttonHeaderText}>Anterior</Text>
+              </View>
+            </TouchableNativeFeedback>
+          )}
+          <Text style={styles.textHeader}>
+            {this.state.currentIndexPregunta + 1} de{" "}
             {this.state.preguntas.length}
           </Text>
-          <ProgressBarAndroid
-            styleAttr="Horizontal"
-            indeterminate={false}
-            color="#6DC8E3"
-            progress={
-              ((this.state.currentIndexPregunta + 1) * 100) /
-              this.state.preguntas.length /
-              100
-            }
-          />
+          {this.state.currentIndexPregunta <
+            this.state.preguntas.length - 1 && (
+            <TouchableNativeFeedback
+              onPress={() => {
+                this.setState({ showEncuesta: true });
+                LayoutAnimation.spring();
+              }}
+              background={TouchableNativeFeedback.SelectableBackground()}
+              useForeground={true}
+              onPress={() => this.nextPregunta()}
+            >
+              <View style={[styles.buttonHeader, styles.buttonNext]}>
+                <Text style={styles.buttonHeaderText}>Siguiente</Text>
+              </View>
+            </TouchableNativeFeedback>
+          )}
+        </View>
+
+        <View style={styles.preguntaContainer}>
           <Text style={styles.pregunta}>
             {this.state.currentPregunta.pregunta}
           </Text>
@@ -300,7 +366,7 @@ export default class DanosTuOpinionScreen extends React.Component {
               </ListItem>
             )
           )}
-        </ScrollView>
+        </View>
         {/* {this.state.preguntas.map((pregunta, indexPregunta) => (
           <View key={indexPregunta} style={styles.preguntaContainer}>
             <Text style={styles.pregunta}>{pregunta.pregunta}</Text>
@@ -322,18 +388,26 @@ export default class DanosTuOpinionScreen extends React.Component {
             ))}
           </View>
         ))} */}
-        <View style={styles.buttonsContainer}>
-          {this.state.currentIndexPregunta !== 0 && (
-            <Button  title="Atrás" onPress={() => this.backPregunta()} />
-          )}
-          {this.state.currentIndexPregunta < this.state.preguntas.length - 1 && (
-            <Button style={styles.next} title="Siguiente" onPress={() => this.nextPregunta()} />
-          )}
-        </View>
-        {this.state.currentIndexPregunta ===
-          this.state.preguntas.length - 1 && (
-          <Button title="Enviar" onPress={() => this.sendEncuesta()} />
-        )}
+        <ProgressBarAndroid
+          styleAttr="Horizontal"
+          indeterminate={false}
+          color="#6DC8E3"
+          progress={
+            ((this.state.currentIndexPregunta + 1) * 100) /
+            this.state.preguntas.length /
+            100
+          }
+        />
+        <TouchableNativeFeedback
+          background={TouchableNativeFeedback.SelectableBackground()}
+          useForeground={true}
+          onPress={() => this.sendEncuesta()}
+          disabled={this.checkSendButtonDisabled()}
+        >
+          <View style={this.checkSendButton()}>
+            <Text style={styles.buttonEnviarText}>Enviar</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>
     );
   }
@@ -358,11 +432,25 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 20,
     color: "#313131",
-    textAlign: "center"
+    textAlign: "center",
+    paddingHorizontal: 30,
+    marginTop: 150,
+    marginBottom: 70
+  },
+  startButton: {
+    backgroundColor: "#6DC8E3",
+    paddingHorizontal: 60,
+    paddingVertical: 10
+  },
+  startButtonText: {
+    color: "white",
+    fontSize: 20
   },
   pregunta: {
-    fontSize: 15,
-    fontWeight: "bold"
+    fontSize: 17,
+    fontWeight: "bold",
+    marginTop: 25,
+    marginBottom: 25
   },
   alternativa: {
     fontSize: 15
@@ -370,15 +458,59 @@ const styles = StyleSheet.create({
   preguntaContainer: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    height: 400
     // flex: 3
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    position: 'absolute',
-    top: 400,
+    flexDirection: "row",
+    alignItems: "center"
+    // position: 'absolute',
+    // top: 400,
   },
   next: {
     marginLeft: 150,
     width: 200
+  },
+  prev: {},
+  header: {
+    flexDirection: "row",
+    height: 50,
+    backgroundColor: "#EBEBEB",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  buttonHeader: {
+    backgroundColor: "#6DC8E3",
+    paddingHorizontal: 10,
+    paddingVertical: 15
+  },
+  buttonNext: {
+    alignSelf: "flex-end",
+    position: "absolute",
+    top: 0,
+    right: 0
+  },
+  buttonBack: {
+    alignSelf: "flex-start"
+  },
+  buttonHeaderText: {
+    color: "white",
+    fontSize: 15
+  },
+  textHeader: {
+    fontSize: 15,
+    position: "absolute",
+    left: 150
+  },
+  buttonEnviar: {
+    backgroundColor: "#6DC8E3",
+    paddingHorizontal: 60,
+    paddingVertical: 10,
+    opacity: 0.5
+  },
+  buttonEnviarText: {
+    color: "white",
+    textAlign: "center",
+    fontSize: 20
   }
 });

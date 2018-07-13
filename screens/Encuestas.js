@@ -84,8 +84,8 @@ export default class Encuestas extends React.Component {
             key={index}
           >
             <View style={styles.encuesta}>
-              <IconFontAwesome name="pencil-square-o" style={styles.logo} />
               <Text style={styles.nombreEncuesta}>{encuesta.nombre}</Text>
+              <IconFontAwesome name="pencil-square-o" style={styles.logo} />
             </View>
           </TouchableNativeFeedback>
         ))}
@@ -108,21 +108,33 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     height: "100%",
+    paddingHorizontal: 20
   },
   logo: {
     fontSize: 35,
-    color: "white",
+    color: "#5B5B5B",
     marginRight: 10,
   },
   encuesta: {
     flexDirection: 'row',
-    backgroundColor: '#6DC8E3',
+    backgroundColor: 'white',
+    borderLeftWidth: 5,
+    borderLeftColor: '#6DC8E3',
+    borderTopWidth: 0.3,
+    borderTopColor: '#B7B7B7',
+    borderRightWidth: 0.3,
+    borderRightColor: '#B7B7B7',
+    borderBottomWidth: 0.3,
+    borderBottomColor: '#B7B7B7',
     paddingVertical: 12,
     paddingLeft: 20,
-    marginTop: 30
+    marginTop: 30,
+    elevation: 2
   },
   nombreEncuesta: {
-    color: 'white',
-    fontSize: 20
+    color: '#5B5B5B',
+    fontSize: 20,
+    width: 250,
+    fontWeight: "400"
   }
 });
