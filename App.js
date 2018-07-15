@@ -33,6 +33,7 @@ import Encuestas from "./screens/Encuestas";
 import MensajeDonacion from "./screens/MensajeDonacionScreen";
 import LoginScreen from "./screens/LoginScreen";
 
+
 // import { YellowBox } from 'react-native';
 // YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
