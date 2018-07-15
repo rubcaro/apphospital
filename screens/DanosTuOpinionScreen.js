@@ -415,7 +415,7 @@ export default class DanosTuOpinionScreen extends React.Component {
 
 const styles = StyleSheet.create({
   listRadio: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   indicator: {
     flex: 1,

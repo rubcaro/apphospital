@@ -1,15 +1,78 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  NativeModules,
+  LayoutAnimation
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Communications from "react-native-communications";
 
+const { UIManager } = NativeModules;
+
+UIManager.setLayoutAnimationEnabledExperimental &&
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+
+const customLinearLayout = {
+  duration: 200,
+  create: {
+    type: LayoutAnimation.Types.linear,
+    property: LayoutAnimation.Properties.scaleXY
+  },
+  update: {
+    type: LayoutAnimation.Types.linear
+  }
+};
+
 export default class EmergenciaScreen extends React.Component {
-  static navigationOptions = {
-    title: "Emergencia Hospitalaria"
+  static navigationOptions =  ({ navigation }) => {
+    return {
+      title: "Emergencia Hospitalaria",
+      header: navigation.getParam('header','')
+    }
   };
+
+  constructor() {
+    super();
+    this.state = {
+      showOne: false
+    };
+  }
+
   render() {
+    if (this.state.showOne) {
+      return (
+        <View style={{ backgroundColor: "red", height: "100%" }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ showOne: !this.state.showOne });
+            this.props.navigation.setParams({header: ''})
+            LayoutAnimation.configureNext(customLinearLayout);
+            }}
+          >
+            <Text
+              style={{
+                color: "white",
+                fontSize: 20,
+                fontWeight: "bold",
+                textAlign: "center",
+                marginTop: 20
+              }}
+            >
+              1 GRAVE
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+
     return (
-      <View style={{backgroundColor: '#6DC8E3', justifyContent: 'flex-start'}}>
+      <View
+        style={{ backgroundColor: "#6DC8E3", justifyContent: "flex-start" }}
+      >
         <Text style={styles.subtitle}>Teléfono</Text>
         <View style={styles.phones}>
           <TouchableOpacity
@@ -20,11 +83,15 @@ export default class EmergenciaScreen extends React.Component {
             <Text style={styles.phoneNumber}>61 2 293295</Text>
           </TouchableOpacity>
         </View>
-        <Image
-          source={require("./../assets/img/emergencias.jpg")}
-          style={styles.image}
-          resizeMode="contain"
-        />
+        <TouchableOpacity
+          onPress={() => {
+            this.setState({ showOne: !this.state.showOne });
+            this.props.navigation.setParams({header: null})
+            LayoutAnimation.configureNext(customLinearLayout);
+          }}
+        >
+          <Image source={require("./../assets/img/prueba.png")} />
+        </TouchableOpacity>
       </View>
     );
   }
@@ -37,7 +104,7 @@ const styles = StyleSheet.create({
   },
   phones: {
     flexDirection: "row",
-    marginBottom: 6,
+    marginBottom: 100,
     backgroundColor: "#6DC8E3",
     marginLeft: 10,
     marginTop: 5
@@ -53,8 +120,8 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    color: 'white',
+    color: "white",
     marginLeft: 10,
     marginTop: 10
-  },
+  }
 });
