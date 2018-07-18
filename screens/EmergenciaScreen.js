@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   NativeModules,
-  LayoutAnimation
+  LayoutAnimation,
+  ScrollView
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import IconFA from "react-native-vector-icons/FontAwesome";
@@ -39,14 +40,14 @@ export default class EmergenciaScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      show: ''
+      show: ""
     };
   }
 
   render() {
-    if (this.state.show === '1') {
+    if (this.state.show === "1") {
       return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
           <View style={styles.screenTitle}>
             <Text style={styles.screenTitleText}>ESI 1 GRAVE</Text>
           </View>
@@ -83,7 +84,7 @@ export default class EmergenciaScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: '' });
+              this.setState({ show: "" });
               this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
@@ -93,13 +94,13 @@ export default class EmergenciaScreen extends React.Component {
               <Text style={styles.screenButtonText}>VOLVER</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
-    if (this.state.show === '2') {
+    if (this.state.show === "2") {
       return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
           <View style={styles.screen2Title}>
             <Text style={styles.screenTitleText}>ESI 2 MEDIANA GRAVEDAD</Text>
           </View>
@@ -136,7 +137,7 @@ export default class EmergenciaScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: '' });
+              this.setState({ show: "" });
               this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
@@ -146,13 +147,13 @@ export default class EmergenciaScreen extends React.Component {
               <Text style={styles.screenButtonText}>VOLVER</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
-    if (this.state.show === '3') {
+    if (this.state.show === "3") {
       return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
           <View style={styles.screen3Title}>
             <Text style={styles.screenTitleText}>ESI 3 MENOS GRAVE</Text>
           </View>
@@ -189,7 +190,7 @@ export default class EmergenciaScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: '' });
+              this.setState({ show: "" });
               this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
@@ -199,13 +200,13 @@ export default class EmergenciaScreen extends React.Component {
               <Text style={styles.screenButtonText}>VOLVER</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
-    if (this.state.show === '4') {
+    if (this.state.show === "4") {
       return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
           <View style={styles.screen4Title}>
             <Text style={styles.screenTitleText}>ESI 4 LEVE</Text>
           </View>
@@ -242,7 +243,7 @@ export default class EmergenciaScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: '' });
+              this.setState({ show: "" });
               this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
@@ -252,13 +253,13 @@ export default class EmergenciaScreen extends React.Component {
               <Text style={styles.screenButtonText}>VOLVER</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
-    if (this.state.show === '5') {
+    if (this.state.show === "5") {
       return (
-        <View style={styles.screenContainer}>
+        <ScrollView style={styles.screenContainer}>
           <View style={styles.screen5Title}>
             <Text style={styles.screenTitleText}>ESI 5 ATENCIÓN GENERAL</Text>
           </View>
@@ -295,7 +296,7 @@ export default class EmergenciaScreen extends React.Component {
           </View>
           <TouchableOpacity
             onPress={() => {
-              this.setState({ show: '' });
+              this.setState({ show: "" });
               this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
@@ -305,7 +306,7 @@ export default class EmergenciaScreen extends React.Component {
               <Text style={styles.screenButtonText}>VOLVER</Text>
             </View>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       );
     }
 
@@ -317,98 +318,100 @@ export default class EmergenciaScreen extends React.Component {
           height: "100%"
         }}
       >
-        <View style={styles.phones}>
+        <ScrollView>
+          <View style={styles.phones}>
+            <TouchableOpacity
+              onPress={() => Communications.phonecall("612293295", true)}
+              style={styles.phones}
+            >
+              <Text style={styles.subtitle}>Teléfono</Text>
+              <Icon name="phone" style={styles.icon} />
+              <Text style={styles.phoneNumber}>61 2 293295</Text>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.paragraph}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu
+            massa a ante tincidunt volutpat. Nulla viverra, felis et tempor
+            ultricies, magna turpis egestas velit, in aliquet metus est et
+            risus. Donec ut faucibus arcu, non ullamcorper eros.
+          </Text>
+          <Text style={styles.title}>SISTEMA DE ATENCIÓN PRIORIZADO</Text>
           <TouchableOpacity
-            onPress={() => Communications.phonecall("612293295", true)}
-            style={styles.phones}
+            onPress={() => {
+              this.setState({ show: "1" });
+              this.props.navigation.setParams({ header: null });
+              LayoutAnimation.configureNext(customLinearLayout);
+            }}
           >
-            <Text style={styles.subtitle}>Teléfono</Text>
-            <Icon name="phone" style={styles.icon} />
-            <Text style={styles.phoneNumber}>61 2 293295</Text>
+            <View style={styles.esContainer}>
+              <Image
+                style={styles.es}
+                source={require("./../assets/img/emergencias/es1.png")}
+              />
+              <Text style={styles.esText1}>GRAVE</Text>
+            </View>
           </TouchableOpacity>
-        </View>
-        <Text style={styles.paragraph}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eu
-          massa a ante tincidunt volutpat. Nulla viverra, felis et tempor
-          ultricies, magna turpis egestas velit, in aliquet metus est et risus.
-          Donec ut faucibus arcu, non ullamcorper eros.
-        </Text>
-        <Text style={styles.title}>SISTEMA DE ATENCIÓN PRIORIZADO</Text>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ show: '1' });
-            this.props.navigation.setParams({ header: null });
-            LayoutAnimation.configureNext(customLinearLayout);
-          }}
-        >
-          <View style={styles.esContainer}>
-            <Image
-              style={styles.es}
-              source={require("./../assets/img/emergencias/es1.png")}
-            />
-            <Text style={styles.esText1}>GRAVE</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ show: '2' });
-            this.props.navigation.setParams({ header: null });
-            LayoutAnimation.configureNext(customLinearLayout);
-          }}
-        >
-          <View style={styles.esContainer}>
-            <Image
-              style={styles.es}
-              source={require("./../assets/img/emergencias/es2.png")}
-            />
-            <Text style={styles.esText2}>MEDIANA GRAVEDAD</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ show: '3' });
-            this.props.navigation.setParams({ header: null });
-            LayoutAnimation.configureNext(customLinearLayout);
-          }}
-        >
-          <View style={styles.esContainer}>
-            <Image
-              style={styles.es}
-              source={require("./../assets/img/emergencias/es3.png")}
-            />
-            <Text style={styles.esText3}>MENOS GRAVE</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ show: '4' });
-            this.props.navigation.setParams({ header: null });
-            LayoutAnimation.configureNext(customLinearLayout);
-          }}
-        >
-          <View style={styles.esContainer}>
-            <Image
-              style={styles.es}
-              source={require("./../assets/img/emergencias/es4.png")}
-            />
-            <Text style={styles.esText4}>LEVE</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            this.setState({ show: '5' });
-            this.props.navigation.setParams({ header: null });
-            LayoutAnimation.configureNext(customLinearLayout);
-          }}
-        >
-          <View style={styles.esContainer}>
-            <Image
-              style={styles.es}
-              source={require("./../assets/img/emergencias/es5.png")}
-            />
-            <Text style={styles.esText5}>ATENCIÓN GENERAL</Text>
-          </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: "2" });
+              this.props.navigation.setParams({ header: null });
+              LayoutAnimation.configureNext(customLinearLayout);
+            }}
+          >
+            <View style={styles.esContainer}>
+              <Image
+                style={styles.es}
+                source={require("./../assets/img/emergencias/es2.png")}
+              />
+              <Text style={styles.esText2}>MEDIANA GRAVEDAD</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: "3" });
+              this.props.navigation.setParams({ header: null });
+              LayoutAnimation.configureNext(customLinearLayout);
+            }}
+          >
+            <View style={styles.esContainer}>
+              <Image
+                style={styles.es}
+                source={require("./../assets/img/emergencias/es3.png")}
+              />
+              <Text style={styles.esText3}>MENOS GRAVE</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: "4" });
+              this.props.navigation.setParams({ header: null });
+              LayoutAnimation.configureNext(customLinearLayout);
+            }}
+          >
+            <View style={styles.esContainer}>
+              <Image
+                style={styles.es}
+                source={require("./../assets/img/emergencias/es4.png")}
+              />
+              <Text style={styles.esText4}>LEVE</Text>
+            </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              this.setState({ show: "5" });
+              this.props.navigation.setParams({ header: null });
+              LayoutAnimation.configureNext(customLinearLayout);
+            }}
+          >
+            <View style={styles.esContainer}>
+              <Image
+                style={styles.es}
+                source={require("./../assets/img/emergencias/es5.png")}
+              />
+              <Text style={styles.esText5}>ATENCIÓN GENERAL</Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
       </View>
     );
   }
@@ -526,7 +529,8 @@ const styles = StyleSheet.create({
   // SCREENS 1
   screenContainer: {
     backgroundColor: "#EDEEF0",
-    height: "100%"
+    height: "100%",
+    paddingBottom: 15
   },
   screenTitle: {
     backgroundColor: "#DE0E21"
@@ -683,5 +687,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     marginLeft: 25
-  },
+  }
 });

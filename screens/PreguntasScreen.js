@@ -46,28 +46,27 @@ export default class PreguntasScreen extends React.Component {
   }
 
   componentDidMount() {
-    this._retrieveData();
+    // this._retrieveData();
   }
 
-  _storeData = async () => {
-    try {
-      await AsyncStorage.clear();
-    } catch (error) {
-      // Error saving data
-    }
-  };
+  // _storeData = async () => {
+  //   try {
+  //     await AsyncStorage.clear();
+  //   } catch (error) {
 
-  _retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getAllKeys();
-      if (value !== null) {
-        // We have data!!
-        alert(value);
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
+  //   }
+  // };
+
+  // _retrieveData = async () => {
+  //   try {
+  //     const value = await AsyncStorage.getAllKeys();
+  //     if (value !== null) {
+
+  //       alert(value);
+  //     }
+  //   } catch (error) {
+  //   }
+  // };
   render() {
     return (
       <View>
@@ -75,8 +74,6 @@ export default class PreguntasScreen extends React.Component {
           dataArray={this.state.dataArray}
           expanded={0}
         />
-        <Text>Preguntas </Text>
-        <Button title="Store storage" onPress={() => this._storeData()} />
       </View>
     );
   }

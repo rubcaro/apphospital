@@ -4,23 +4,93 @@ import {
   Text,
   StyleSheet,
   Switch,
-  TouchableNativeFeedback
+  TouchableNativeFeedback,
+  AsyncStorage,
+  TouchableOpacity
 } from "react-native";
 
 export default class OpcionesScreen extends React.Component {
   static navigationOptions = {
     title: "Configuraciones"
   };
+
+  constructor() {
+    super();
+    this.state = {
+      notification: false,
+      sound: false
+    };
+  }
+
+  componentDidMount() {
+    // Promise.resolve()
+    //   .then(() => this._retrieveData())
+    //   .then(() => console.log(this.state.notification));
+    this._retrieveData();
+    
+  }
+
+  controlNotification = () => {
+    Promise.resolve()
+      .then(() => this.setState({ notification: !this.state.notification }))
+      .then(() => this._changeValue());
+
+  }
+
+  _changeValue = async () => {
+    try {
+      if (this.state.notification) {
+        await AsyncStorage.setItem(
+          "notificacion",
+          "1"
+        );
+      } else {
+        await AsyncStorage.removeItem(
+          "notificacion",
+        );
+      }
+    } catch (error) {
+      alert("Lo sentimos, no se ha podido guardar su preferencia");
+    }
+  };
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("notificacion");
+      if (value !== null) {
+        this.setState({notification: true})
+        
+        // console.log('dsfh');
+      } 
+    } catch (error) {
+      alert("error");
+    }
+  };
+
+  _clear = async () => {
+    try {
+      await AsyncStorage.clear();
+    } catch (error) {
+
+    }
+  };
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Notificaciones</Text>
         <View style={styles.switch}>
-          <Switch onValueChange={() => {}} value={false} />
+          <Switch
+            onValueChange={this.controlNotification}
+            value={this.state.notification}
+          />
           <Text>Desactivar notificaciones</Text>
         </View>
         <View style={styles.switch}>
-          <Switch value={false} />
+          <Switch
+            onValueChange={() => this.setState({ sound: !this.state.sound })}
+            value={this.state.sound}
+          />
           <Text>Desactivar sonido</Text>
         </View>
         <View style={styles.hr} />
@@ -43,7 +113,12 @@ export default class OpcionesScreen extends React.Component {
           </View>
         </TouchableNativeFeedback>
         <View style={styles.hr} />
-        <Text style={styles.title}>Información</Text>
+
+        <TouchableOpacity onPress={() => this._clear()}>
+          <View>
+            <Text style={styles.title}>Información</Text>
+          </View>
+        </TouchableOpacity>
         <Text style={{ paddingBottom: 2 }}>Términos y condiciones</Text>
         <View style={styles.hr} />
         <Text>Acerca de</Text>

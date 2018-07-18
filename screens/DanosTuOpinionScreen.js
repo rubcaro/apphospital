@@ -157,7 +157,7 @@ export default class DanosTuOpinionScreen extends React.Component {
     });
     console.log(this.state.preguntas);
     if (respuesta.respuestas.length !== this.state.preguntas.length) {
-      alert("Responda todas las preguntas por favor");
+      Alert.alert("Mensaje", "Responda todas las preguntas por favor");
     } else {
       fetch("http://206.189.220.82/api/ingresar-resultado", {
         body: JSON.stringify(respuesta),
@@ -170,11 +170,12 @@ export default class DanosTuOpinionScreen extends React.Component {
         .then(data => {
           console.log(data);
           this._storeData();
-          alert("Encuesta enviada correctamente");
+          Alert.alert("Mensaje","Encuesta enviada correctamente");
         })
         .catch(error => {
           console.log(error);
-          alert(
+          Alert.alert(
+            "Mensaje",
             "Lo sentimos, su encuesta no se ha podido enviar. Vuelva a intentar"
           );
         });

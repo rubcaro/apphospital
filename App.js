@@ -32,7 +32,8 @@ import SideMenu from "./screens/SideMenu";
 import Encuestas from "./screens/Encuestas";
 import MensajeDonacion from "./screens/MensajeDonacionScreen";
 import LoginScreen from "./screens/LoginScreen";
-
+import ReglamentoScreen from "./screens/ReglamentoScreen";
+import IaasScreen from './screens/IaasScreen';
 
 // import { YellowBox } from 'react-native';
 // YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
@@ -144,6 +145,8 @@ const RootStack = createStackNavigator(
     Encuestas: Encuestas,
     App: App,
     MensajeDonacion: MensajeDonacion,
+    Reglamento: ReglamentoScreen,
+    Iaas: IaasScreen
   },
   {
     InitialRouteName: "Login",

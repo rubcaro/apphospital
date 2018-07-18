@@ -7,10 +7,13 @@ import {
   ScrollView,
   TouchableOpacity,
   NativeModules,
-  LayoutAnimation
+  LayoutAnimation,
+  TouchableNativeFeedback,
+  Linking
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import IconFA from "react-native-vector-icons/FontAwesome";
+import Communications from "react-native-communications";
 
 const { UIManager } = NativeModules;
 
@@ -34,8 +37,20 @@ export default class BancoSangreScreen extends React.Component {
       title: "Banco de Sangre",
       header: navigation.getParam("header", ""),
       headerStyle: {
-        backgroundColor: '#BE1522'
-      }
+        backgroundColor: "#BE1522"
+      },
+      headerLeft: (
+        <TouchableNativeFeedback
+          onPress={() => navigation.navigate("Home")}
+          background={TouchableNativeFeedback.SelectableBackground()}
+          useForeground={true}
+        >
+          <Icon
+            style={{ color: "white", fontSize: 26, marginLeft: 15 }}
+            name="arrow-back"
+          />
+        </TouchableNativeFeedback>
+      )
     };
   };
 
@@ -117,7 +132,7 @@ export default class BancoSangreScreen extends React.Component {
           <TouchableOpacity
             onPress={() => {
               this.setState({ showMore: !this.state.showMore });
-              this.props.navigation.setParams({ header: '' });
+              this.props.navigation.setParams({ header: "" });
               LayoutAnimation.configureNext(customLinearLayout);
             }}
           >
@@ -140,18 +155,30 @@ export default class BancoSangreScreen extends React.Component {
             <Text style={styles.days}>Viernes</Text>
             <Text style={styles.horary}>08:00 a 15:30</Text>
           </View>
+            <TouchableOpacity
+              onPress={() => Communications.phonecall("612293425", true)}
+            >
           <View style={styles.telefonoContainer}>
             <Text style={styles.subtitleTel}>Teléfono</Text>
             <Icon name="phone" style={styles.icon} />
-            <Text style={{ flex: 1, fontSize: 16 }}>61 2 293425</Text>
+              <Text style={{ flex: 1, fontSize: 16 }}>61 2 293425</Text>
           </View>
-          <View style={{ flexDirection: "row" }}>
-            <IconFA
-              name="facebook-square"
-              style={{ flex: 1, color: "#282280", fontSize: 25 }}
-            />
-            <Text style={{ flex: 4, fontSize: 16 }}>Banco de Sangre HCM</Text>
-          </View>
+            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              Linking.openURL(
+                "https://www.facebook.com/people/Banco-De-Sangre-Hospital-Cl%C3%ADnico-Magallanes/100006831528288"
+              ).catch(err => console.error("An error occurred", err))
+            }
+          >
+            <View style={{ flexDirection: "row" }}>
+              <IconFA
+                name="facebook-square"
+                style={{ flex: 1, color: "#282280", fontSize: 25 }}
+              />
+              <Text style={{ flex: 4, fontSize: 16 }}>Banco de Sangre HCM</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         <Text style={styles.title}>REQUISITOS MÍNIMOS</Text>
         <View style={styles.requisitosContainer}>
@@ -275,7 +302,7 @@ const styles = StyleSheet.create({
     marginRight: 20
   },
   requisitoText: {
-    fontSize: 20,
+    fontSize: 20
     // paddingRight: 20
     // flex: 2
   },
